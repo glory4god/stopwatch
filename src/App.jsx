@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import History from "./components/History.jsx";
@@ -28,34 +28,46 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [timer, setTimer] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [histories, setHistories] = useState([]);
+  const [timer, setTimer] = React.useState(null);
+  const [currentTime, setCurrentTime] = React.useState(0);
+  const [histories, setHistories] = React.useState([]);
 
-  const startTimer = useCallback(() => {
-    if (timer === null) {
-      setTimer(
-        setInterval(() => {
-          setCurrentTime((currentTime) => currentTime + 1);
-        }, 10)
-      );
-    }
-  });
-  const pauseTimer = useCallback(() => {
-    if (timer !== null) {
-      clearInterval(timer);
-      setTimer(null);
-    }
-  });
-  const resetTimer = useCallback(() => {
-    pauseTimer();
-    setCurrentTime(0);
-    setHistories([]);
-  });
+  const startTimer = React.useCallback(
+    (currentTime) => {
+      if (timer === null) {
+        setTimer(
+          setInterval(() => {
+            setCurrentTime((currentTime) => currentTime + 1);
+          }, 10)
+        );
+      }
+    },
+    [timer]
+  );
+  const pauseTimer = React.useCallback(
+    (currentTime) => {
+      if (timer !== null) {
+        clearInterval(timer);
+        setTimer(null);
+      }
+    },
+    [timer]
+  );
+  const resetTimer = React.useCallback(
+    (timer, histories) => {
+      pauseTimer();
+      setCurrentTime(0);
+      setHistories([]);
+    },
+    [pauseTimer]
+  );
 
-  const createLap = useCallback(() => {
-    setHistories((histories) => [...histories, currentTime]);
-  });
+  const createLap = React.useCallback(
+    (histories) => {
+      setHistories((histories) => [...histories, currentTime]);
+    },
+    [currentTime]
+  );
 
   return (
     <Root>
