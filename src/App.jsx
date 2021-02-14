@@ -1,39 +1,30 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import History from "./components/History.jsx";
+import Timerwindow from "./components/Timerwindow.jsx";
 
 const Root = styled.div`
   color: black;
 `;
 const Container = styled.div`
-  background-color: white;
-  width: 50vh;
-  height: 50vh;
+  width: 500px;
+  height: 500px;
   text-align: center;
+  margin: 0 auto;
 
   .title {
     padding-top: 1rem;
+    font-size: 2rem;
   }
   .button {
     margin: 0 auto;
   }
-  .history {
-  }
-`;
-const History = ({ history, order }) => {
-  return (
-    <div>
-      {order}: {(history / 100).toFixed(2)}
-    </div>
-  );
-};
 
-const Timerwindow = styled(Paper)`
-  margin: 0.5rem 5rem 0.5rem 4.7rem;
-  width: 30vh;
-  height: 10vh;
-  font-size: 3rem;
+  .lap-line {
+    margin: 0.4rem 0;
+    font-size: 1rem;
+  }
 `;
 
 function App() {
@@ -41,29 +32,30 @@ function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const [histories, setHistories] = useState([]);
 
-  const startTimer = () => {
+  const startTimer = useCallback(() => {
     if (timer === null) {
       setTimer(
         setInterval(() => {
-          setCurrentTime((prev) => prev + 1);
+          setCurrentTime((currentTime) => currentTime + 1);
         }, 10)
       );
     }
-  };
-  const pauseTimer = () => {
+  });
+  const pauseTimer = useCallback(() => {
     if (timer !== null) {
       clearInterval(timer);
       setTimer(null);
     }
-  };
-  const resetTimer = () => {
+  });
+  const resetTimer = useCallback(() => {
     pauseTimer();
     setCurrentTime(0);
-  };
+    setHistories([]);
+  });
 
-  const createLap = () => {
+  const createLap = useCallback(() => {
     setHistories((histories) => [...histories, currentTime]);
-  };
+  });
 
   return (
     <Root>
@@ -119,7 +111,7 @@ function App() {
             </Button>
           </div>
         </div>
-        <div className="history">
+        <div>
           {histories.map((history, idx) => (
             <History
               history={history}
