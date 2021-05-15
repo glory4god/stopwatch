@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import History from "./components/History.jsx";
-import Timerwindow from "./components/Timerwindow.jsx";
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import History from './components/History.jsx';
+import Timerwindow from './components/Timerwindow.jsx';
 
 const Root = styled.div`
   color: black;
@@ -27,31 +27,32 @@ const Container = styled.div`
   }
 `;
 
-function App() {
-  const [timer, setTimer] = React.useState(null);
+const App = () => {
+  const [timer, setTimer] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [histories, setHistories] = React.useState([]);
 
   const startTimer = React.useCallback(
     (currentTime) => {
-      if (timer === null) {
+      if (timer === false) {
         setTimer(
           setInterval(() => {
             setCurrentTime((currentTime) => currentTime + 1);
-          }, 10)
+          }, 10),
         );
       }
     },
-    [timer]
+    [timer],
   );
+
   const pauseTimer = React.useCallback(
     (currentTime) => {
-      if (timer !== null) {
+      if (timer !== false) {
         clearInterval(timer);
-        setTimer(null);
+        setTimer(false);
       }
     },
-    [timer]
+    [timer],
   );
   const resetTimer = React.useCallback(
     (timer, histories) => {
@@ -59,14 +60,14 @@ function App() {
       setCurrentTime(0);
       setHistories([]);
     },
-    [pauseTimer]
+    [pauseTimer],
   );
 
   const createLap = React.useCallback(
     (histories) => {
       setHistories((histories) => [...histories, currentTime]);
     },
-    [currentTime]
+    [currentTime],
   );
 
   return (
@@ -81,8 +82,7 @@ function App() {
                 startTimer();
               }}
               variant="outlined"
-              disabled={timer !== null}
-            >
+              disabled={timer !== false}>
               start
             </Button>
             <Button
@@ -90,16 +90,14 @@ function App() {
                 pauseTimer();
               }}
               variant="outlined"
-              disabled={timer === null}
-            >
+              disabled={timer === false}>
               pause
             </Button>
             <Button
               onClick={() => {
                 resetTimer();
               }}
-              variant="outlined"
-            >
+              variant="outlined">
               reset
             </Button>
           </div>
@@ -109,16 +107,14 @@ function App() {
                 createLap();
               }}
               variant="outlined"
-              disabled={timer === null}
-            >
+              disabled={timer === false}>
               lap
             </Button>
             <Button
               onClick={() => {
                 setHistories([]);
               }}
-              variant="outlined"
-            >
+              variant="outlined">
               clear
             </Button>
           </div>
@@ -135,6 +131,6 @@ function App() {
       </Container>
     </Root>
   );
-}
+};
 
 export default App;

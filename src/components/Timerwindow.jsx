@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Paper from "@material-ui/core/Paper";
+import styled from 'styled-components';
+import Paper from '@material-ui/core/Paper';
 
 const Timerwindow = styled(Paper)`
   margin: 10px auto;
